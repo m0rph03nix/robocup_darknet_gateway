@@ -7,6 +7,8 @@ from darknet_gateway_srvs.srv import ObjectsDetectionGateway_Srv as ODG_Srv
 from darknet_ros_msgs.msg import BoundingBox, BoundingBoxes
 from robocup_msgs.msg import Entity2D, Entity2DList
 
+from copy import deepcopy
+
 
 
 # Node example class.
@@ -22,9 +24,9 @@ class ObjectsDetectionGateway_process():
         el = Entity2DList()
 
         el.header = bounding_boxes.header
-        # xxx = bounding_boxes.image_header
 
-        for bounding_box in bounding_boxes :
+        for bounding_box in bounding_boxes.bounding_boxes :
+
 
             e = Entity2D()
 

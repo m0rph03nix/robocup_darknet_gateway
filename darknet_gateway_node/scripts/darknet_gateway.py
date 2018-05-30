@@ -29,11 +29,15 @@ class ObjectsDetectionGateway_node():
     def __init__(self):
 
         self.ready = 0
+        self.image_ready = 0
 
         rospy.init_node('ObjectsDetectionGateway_node', anonymous=False)
         rospy.loginfo("ObjectsDetectionGateway_node init")
 
-        rospy.Subscriber("/pepper_robot/naoqi_driver/camera/front/image_raw", Image, self.img_callback)
+        #rospy.Subscriber("/pepper_robot/naoqi_driver/camera/front/image_raw", Image, self.img_callback)
+        self.IMAGE_TOPIC_NAME = rospy.get_param("/darknet_ros/subscribers/camera_reading/topic","/videofile/image_raw") 
+
+        rospy.Subscriber(self.IMAGE_TOPIC_NAME, Image, self.img_callback)
         rospy.loginfo("ObjectsDetectionGateway_node topics init")
 
         #declare ros service 
@@ -64,15 +68,16 @@ class ObjectsDetectionGateway_node():
         while not self.image_ready :
             rospy.loginfo("wait image")
             rospy.sleep(0.05)
+            
         goal = CheckForObjectsGoal()
-        goal.id=1
-        goal.image=self.msg_img
+        goal.id = 1
+        goal.image = self.msg_img
         self._actCheckForObjects.send_goal(goal)
         self._actCheckForObjects.wait_for_result()
 
         result = self._actCheckForObjects.get_result()
 
-        e2D = odg_process.BoundingBoxes_to_Entity2DList( result )
+        e2D = odg_process.BoundingBoxes_to_Entity2DList( result.bounding_boxes )
 
         #self.service_running = 0
 
