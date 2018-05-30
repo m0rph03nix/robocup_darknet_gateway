@@ -54,10 +54,14 @@ class ObjectsDetectionGateway_node():
     def ODG_SrvCallback(self,req):
 
         self.service_running = 1
+        self.image_ready = 0
 
         odg_process = ODG_process()
 
         #goal = odg_process.CreateGoalFromImage( self.msg_img )
+
+        while not self.image_ready :
+            rospy.loginfo("wait image")
 
         self._actCheckForObjects.send_goal( self.msg_img )
         self._actCheckForObjects.wait_for_result()
@@ -73,6 +77,7 @@ class ObjectsDetectionGateway_node():
     def img_callback(self, msg_img):
         if self.ready == 1 :
             if self.service_running == 0:
+                self.image_ready = 1
                 self.msg_img = msg_img       
 
 
