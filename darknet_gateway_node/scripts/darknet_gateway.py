@@ -12,7 +12,7 @@ import actionlib
 
 from darknet_gateway_srvs.srv import ObjectsDetectionGateway_Srv as ODG_Srv
 
-from darknet_ros_msgs.msg import BoundingBox, BoundingBoxes, CheckForObjectsAction
+from darknet_ros_msgs.msg import BoundingBox, BoundingBoxes, CheckForObjectsAction, CheckForObjectsGoal
 
 
 
@@ -40,8 +40,9 @@ class ObjectsDetectionGateway_node():
         self.opg_Srv = rospy.Service('object_detection_gateway_srv', ODG_Srv, self.ODG_SrvCallback)
         rospy.loginfo("ObjectsDetectionGateway_node services init")
 
-        self._actCheckForObjects = actionlib.SimpleActionClient("check_for_objects", CheckForObjectsAction)
-        self._actCheckForObjects.wait_for_server(rospy.Duration(10))
+        self._actCheckForObjects = actionlib.SimpleActionClient("/darknet_ros/check_for_objects", CheckForObjectsAction)
+        #self._actCheckForObjects.wait_for_server(rospy.Duration(5))
+        self._actCheckForObjects.wait_for_server()
         rospy.loginfo("ObjectsDetectionGateway_node actions init")
 
         self.service_running = 0
@@ -53,8 +54,8 @@ class ObjectsDetectionGateway_node():
 
     def ODG_SrvCallback(self,req):
 
-        self.service_running = 1
-        self.image_ready = 0
+        #self.service_running = 1
+        #self.image_ready = 0
 
         odg_process = ODG_process()
 
@@ -62,23 +63,26 @@ class ObjectsDetectionGateway_node():
 
         while not self.image_ready :
             rospy.loginfo("wait image")
-
-        self._actCheckForObjects.send_goal( self.msg_img )
+            rospy.sleep(0.05)
+        goal = CheckForObjectsGoal()
+        goal.id=1
+        goal.image=self.msg_img
+        self._actCheckForObjects.send_goal(goal)
         self._actCheckForObjects.wait_for_result()
 
         result = self._actCheckForObjects.get_result()
 
         e2D = odg_process.BoundingBoxes_to_Entity2DList( result )
 
-        self.service_running = 0
+        #self.service_running = 0
 
         return e2D
 
     def img_callback(self, msg_img):
         if self.ready == 1 :
-            if self.service_running == 0:
-                self.image_ready = 1
-                self.msg_img = msg_img       
+            #if self.service_running == 0:
+            self.image_ready = 1
+            self.msg_img = msg_img       
 
 
 def main():

@@ -1,8 +1,8 @@
 subscribers:
 
   camera_reading:
-    topic: /pepper_robot/camera/front/image_raw
-
+    topic: /pepper_robot/naoqi_driver/camera/front/image_raw
+    
     queue_size: 1
 
 actions:
