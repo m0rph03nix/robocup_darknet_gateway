@@ -39,7 +39,7 @@ class ObjectsDetectionGateway_tests():
     def test1(self):
 
         try:
-            labels = []
+            labels = ["redbull"]
             test_darknet_gateway_srv = rospy.ServiceProxy('object_detection_gateway_srv', ODG_Srv)
             resp = test_darknet_gateway_srv(labels)
             rospy.loginfo("ObjectsDetectionGateway_tests services OK")

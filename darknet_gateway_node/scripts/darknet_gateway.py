@@ -77,7 +77,7 @@ class ObjectsDetectionGateway_node():
 
         result = self._actCheckForObjects.get_result()
 
-        e2D = odg_process.BoundingBoxes_to_Entity2DList( result.bounding_boxes )
+        e2D = odg_process.BoundingBoxes_to_Entity2DList( result.bounding_boxes, req.labels )
 
         #self.service_running = 0
 

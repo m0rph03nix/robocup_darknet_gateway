@@ -20,26 +20,27 @@ class ObjectsDetectionGateway_process():
         self.t = 0
 
 
-    def BoundingBoxes_to_Entity2DList(self, bounding_boxes):
+    def BoundingBoxes_to_Entity2DList(self, bounding_boxes, labels):
         el = Entity2DList()
 
         el.header = bounding_boxes.header
 
         for bounding_box in bounding_boxes.bounding_boxes :
 
+            if len(labels)==0 or bounding_box.Class in labels :
 
-            e = Entity2D()
+                e = Entity2D()
 
-            e.label =   bounding_box.Class
-            #e.xxx =    bounding_box.probability
-            e.pose.x =  (bounding_box.xmin + bounding_box.xmax) / 2
-            e.pose.y =  (bounding_box.ymin + bounding_box.ymax) / 2
-            e.bounding_box.x =      bounding_box.xmin 
-            e.bounding_box.y =      bounding_box.ymin 
-            e.bounding_box.width =  (bounding_box.xmax - bounding_box.xmin) 
-            e.bounding_box.height = (bounding_box.ymax - bounding_box.ymin) 
+                e.label =   bounding_box.Class
+                #e.xxx =    bounding_box.probability
+                e.pose.x =  (bounding_box.xmin + bounding_box.xmax) / 2
+                e.pose.y =  (bounding_box.ymin + bounding_box.ymax) / 2
+                e.bounding_box.x =      bounding_box.xmin 
+                e.bounding_box.y =      bounding_box.ymin 
+                e.bounding_box.width =  (bounding_box.xmax - bounding_box.xmin) 
+                e.bounding_box.height = (bounding_box.ymax - bounding_box.ymin) 
 
-            el.entity2DList.append( e )
+                el.entity2DList.append( e )
 
         return el
         
