@@ -39,13 +39,16 @@ class ObjectsDetectionGateway_tests():
     def test1(self):
 
         try:
-            labels = ["sprite"]
+            labels = []
             test_darknet_gateway_srv = rospy.ServiceProxy('object_detection_gateway_srv', ODG_Srv)
             resp = test_darknet_gateway_srv(labels)
             rospy.loginfo("ObjectsDetectionGateway_tests services OK")
             print "service:" + str(resp.entities)
         except rospy.ServiceException, e:
             print "Service call failed: %s"%e
+
+            # Result definition
+
 
 
 
