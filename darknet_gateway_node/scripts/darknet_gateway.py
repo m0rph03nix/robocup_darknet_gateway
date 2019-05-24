@@ -12,6 +12,7 @@ import actionlib
 
 
 from darknet_gateway_srvs.srv import ObjectsDetectionGateway_Srv as ODG_Srv
+from darknet_gateway_srvs.srv import ObjectsDetectionGateway_distSorted_Srv as ODG_distSorted_Srv
 
 from darknet_ros_msgs.msg import BoundingBox, BoundingBoxes, CheckForObjectsAction, CheckForObjectsGoal
 
@@ -31,6 +32,8 @@ class ObjectsDetectionGateway_node():
 
         self.ready = 0
         self.image_ready = 0
+        self.image_width = 0
+        self.image_height = 0        
 
         rospy.init_node('ObjectsDetectionGateway_node', anonymous=False)
         rospy.loginfo("ObjectsDetectionGateway_node init")
@@ -42,8 +45,11 @@ class ObjectsDetectionGateway_node():
         rospy.loginfo("ObjectsDetectionGateway_node topics init")
 
         #declare ros service 
-        self.opg_Srv = rospy.Service('object_detection_gateway_srv', ODG_Srv, self.ODG_SrvCallback)
-        rospy.loginfo("ObjectsDetectionGateway_node services init")
+        self.opg_Srv = rospy.Service('object_detection_gateway_srv', ODG_Srv, self.ODG_BB_SrvCallback)
+        rospy.loginfo("ObjectsDetectionGateway_node object_detection_gateway_srv services init")
+
+        self.opg_distSorted_Srv = rospy.Service('object_detection_gateway_distSorted_srv', ODG_distSorted_Srv, self.ODG_BB_distSorted_SrvCallback )
+        rospy.loginfo("ObjectsDetectionGateway_node object_detection_gateway_distSorted_srv services init")
 
         self._actCheckForObjects = actionlib.SimpleActionClient("/darknet_ros/check_for_objects", CheckForObjectsAction)
         #self._actCheckForObjects.wait_for_server(rospy.Duration(5))
@@ -57,7 +63,7 @@ class ObjectsDetectionGateway_node():
 
 
 
-    def ODG_SrvCallback(self,req):
+    def ODG_BB_SrvCallback(self,req):
 
         #self.service_running = 1
         #self.image_ready = 0
@@ -84,11 +90,30 @@ class ObjectsDetectionGateway_node():
 
         return e2D
 
+
+    def ODG_BB_distSorted_SrvCallback(self,req):
+        odg_process = ODG_process()
+        e2D = self.ODG_BB_SrvCallback(req)
+
+        scoreList, entityList, PitchList, YawList = odg_process.get_e2D_distSorted_withAngles(e2D, self.image_width, self.image_height)
+
+        e2D.entity2DList = entityList
+
+        return  {   'entities': e2D, #{'header': e2D.header, 'entity2DList': entityList }
+                    'pitchList': PitchList,
+                    'yawList' : YawList,
+                    'scoreList' : scoreList
+                }
+    
+
+
     def img_callback(self, msg_img):
         if self.ready == 1 :
             #if self.service_running == 0:
             self.image_ready = 1
             self.msg_img = msg_img       
+            self.image_width = msg_img.height
+            self.image_height = msg_img.height
 
 
 def main():
