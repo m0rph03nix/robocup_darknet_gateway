@@ -87,10 +87,10 @@ class ObjectsDetectionGateway_process():
             y = entity.bounding_box.y
             x2 = x*x #sqrt(x*x, y*y)
             
-            HFov = 57.2 * pi / 180.0  # Horizontal field of view of the front Pepper Camera
-            Yaw = (HFov / 2.0) *  (x - image_width/2) / (image_width / 2) #Angle from the center of the camera to neck_x
-            VFov = 44.3 * pi / 180.0  # Vertical field of view of the front Pepper Camera
-            Pitch = (HFov / 2.0) *  (y - image_height/2) / (image_height / 2) #Angle from the center of the camera to neck_x
+            HFov = - 57.2 * pi / 180.0  # Horizontal field of view of the front Pepper Camera
+            Yaw = (HFov / 2.0) *  (x - image_width / 2.0) / (image_width / 2.0) #Angle from the center of the camera to neck_x
+            VFov = - 44.3 * pi / 180.0  # Vertical field of view of the front Pepper Camera
+            Pitch = (HFov / 2.0) *  (y - image_height / 2.0) / (image_height / 2.0) #Angle from the center of the camera to neck_x
 
             score = float(x2) / float(entity.bounding_box.width) / float(entity.bounding_box.height)
             scoreList.append( [score, entity, Pitch, Yaw] )
