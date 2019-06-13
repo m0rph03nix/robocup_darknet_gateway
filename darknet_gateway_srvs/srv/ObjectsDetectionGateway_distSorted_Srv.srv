@@ -1,0 +1,6 @@
+string[] labels
+---
+robocup_msgs/Entity2DList entities 
+float32[] pitchList
+float32[] yawList
+float32[] scoreList

@@ -59,6 +59,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_service_files(
    FILES
   ObjectsDetectionGateway_Srv.srv
+  ObjectsDetectionGateway_distSorted_Srv.srv
  )
 
 ## Generate actions in the 'action' folder

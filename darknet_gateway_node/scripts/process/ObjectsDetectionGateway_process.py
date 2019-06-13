@@ -11,6 +11,8 @@ from robocup_msgs.msg import Entity2D, Entity2DList
 
 from copy import deepcopy
 
+from math import pi
+
 import csv
 import rospkg
 
@@ -53,7 +55,7 @@ class ObjectsDetectionGateway_process():
             if bounding_box.Class in words.keys() :
                 word = words[bounding_box.Class]
             else :
-                word = 'xxxxxxxxxxxxxxxxxxxxxx'
+                word = 'There are no object found'
 
             print word
 
@@ -73,6 +75,60 @@ class ObjectsDetectionGateway_process():
                 el.entity2DList.append( e )
 
         return el
+
+
+    def get_e2D_distSorted_withAngles(self, e2D, image_width, image_height):
+        scoreList = []
+        score = 0
+
+        for entity in e2D.entity2DList:
+            rospy.loginfo(entity.label)
+            x = entity.bounding_box.x 
+            y = entity.bounding_box.y
+            x2 = x*x #sqrt(x*x, y*y)
+            
+            HFov = - 57.2 * pi / 180.0  # Horizontal field of view of the front Pepper Camera
+            Yaw = (HFov / 2.0) *  (x - image_width / 2.0) / (image_width / 2.0) #Angle from the center of the camera to neck_x
+            VFov = - 44.3 * pi / 180.0  # Vertical field of view of the front Pepper Camera
+            Pitch = (HFov / 2.0) *  (y - image_height / 2.0) / (image_height / 2.0) #Angle from the center of the camera to neck_x
+
+            score = float(x2) / float(entity.bounding_box.width) / float(entity.bounding_box.height)
+            scoreList.append( [score, entity, Pitch, Yaw] )
+            #find index du min de scoreList
+
+        sortedScoreList = sorted(scoreList, key=lambda attributes: attributes, reverse=True)
+
+        scoreList   = map(lambda x: x[0], sortedScoreList)
+        entityList  = map(lambda x: x[1], sortedScoreList)
+        PitchList   = map(lambda x: x[2], sortedScoreList)
+        YawList     = map(lambda x: x[3], sortedScoreList)
+
+        return scoreList, entityList, PitchList, YawList
+
+
+    def BoundingBoxes_Filtered(self, bounding_boxes, labels):
+        bbs = BoundingBoxes()
+
+        bbs.header = bounding_boxes.header
+        words = self.Trad()
+
+        print words
+        print " "
+
+        for bounding_box in bounding_boxes.bounding_boxes :
+
+            if bounding_box.Class in words.keys() :
+                word = words[bounding_box.Class]
+            else :
+                word = 'There are no object found'
+
+            print word
+
+            if len(labels)==0 or word in labels :
+
+                bbs.bounding_boxes.append( bounding_box )
+
+        return bbs        
         
     
     def CreateGoalFromImage(self):
