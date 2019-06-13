@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Symlink to data folder
+darknet_gateway_config/config/darknet_data
