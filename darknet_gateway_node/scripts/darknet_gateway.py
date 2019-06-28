@@ -1,8 +1,8 @@
-#!/usr/bin/env python  
+#!/usr/bin/env python
 __author__ ='Raphael Leber'
 
 
-import rospy 
+import rospy
 import actionlib
 
 
@@ -33,18 +33,18 @@ class ObjectsDetectionGateway_node():
         self.ready = 0
         self.image_ready = 0
         self.image_width = 0
-        self.image_height = 0        
+        self.image_height = 0
 
         rospy.init_node('ObjectsDetectionGateway_node', anonymous=False)
         rospy.loginfo("ObjectsDetectionGateway_node init")
 
         #rospy.Subscriber("/pepper_robot/naoqi_driver/camera/front/image_raw", Image, self.img_callback)
-        self.IMAGE_TOPIC_NAME = rospy.get_param("/darknet_ros/subscribers/camera_reading/topic","/videofile/image_raw") 
+        self.IMAGE_TOPIC_NAME = rospy.get_param("/darknet_ros/subscribers/camera_reading/topic","/videofile/image_raw")
 
         rospy.Subscriber(self.IMAGE_TOPIC_NAME, Image, self.img_callback)
         rospy.loginfo("ObjectsDetectionGateway_node topics init")
 
-        #declare ros service 
+        #declare ros service
         self.opg_Srv = rospy.Service('object_detection_gateway_srv', ODG_Srv, self.ODG_BB_SrvCallback)
         rospy.loginfo("ObjectsDetectionGateway_node object_detection_gateway_srv services init")
 
@@ -75,7 +75,7 @@ class ObjectsDetectionGateway_node():
         while not self.image_ready :
             rospy.loginfo("wait image")
             rospy.sleep(0.05)
-            
+
         goal = CheckForObjectsGoal()
         goal.id = 1
         goal.image = self.msg_img
@@ -104,15 +104,15 @@ class ObjectsDetectionGateway_node():
                     'yawList' : YawList,
                     'scoreList' : scoreList
                 }
-    
+
 
 
     def img_callback(self, msg_img):
         if self.ready == 1 :
             #if self.service_running == 0:
             self.image_ready = 1
-            self.msg_img = msg_img       
-            self.image_width = msg_img.height
+            self.msg_img = msg_img
+            self.image_width = msg_img.width
             self.image_height = msg_img.height
 
 

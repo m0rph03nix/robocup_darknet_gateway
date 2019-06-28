@@ -67,10 +67,10 @@ class ObjectsDetectionGateway_process():
                 #e.xxx =    bounding_box.probability
                 e.pose.x =  (bounding_box.xmin + bounding_box.xmax) / 2
                 e.pose.y =  (bounding_box.ymin + bounding_box.ymax) / 2
-                e.bounding_box.x =      bounding_box.xmin 
-                e.bounding_box.y =      bounding_box.ymin 
-                e.bounding_box.width =  (bounding_box.xmax - bounding_box.xmin) 
-                e.bounding_box.height = (bounding_box.ymax - bounding_box.ymin) 
+                e.bounding_box.x =      bounding_box.xmin
+                e.bounding_box.y =      bounding_box.ymin
+                e.bounding_box.width =  (bounding_box.xmax - bounding_box.xmin)
+                e.bounding_box.height = (bounding_box.ymax - bounding_box.ymin)
 
                 el.entity2DList.append( e )
 
@@ -78,19 +78,23 @@ class ObjectsDetectionGateway_process():
 
 
     def get_e2D_distSorted_withAngles(self, e2D, image_width, image_height):
+        """
+        Get pitch and yaw of each detected object according to the center of the camera images
+        max pitch =
+        """
         scoreList = []
         score = 0
 
         for entity in e2D.entity2DList:
             rospy.loginfo(entity.label)
-            x = entity.bounding_box.x 
+            x = entity.bounding_box.x
             y = entity.bounding_box.y
             x2 = x*x #sqrt(x*x, y*y)
-            
+
             HFov = - 57.2 * pi / 180.0  # Horizontal field of view of the front Pepper Camera
             Yaw = (HFov / 2.0) *  (x - image_width / 2.0) / (image_width / 2.0) #Angle from the center of the camera to neck_x
             VFov = - 44.3 * pi / 180.0  # Vertical field of view of the front Pepper Camera
-            Pitch = (HFov / 2.0) *  (y - image_height / 2.0) / (image_height / 2.0) #Angle from the center of the camera to neck_x
+            Pitch = (VFov / 2.0) *  (y - image_height / 2.0) / (image_height / 2.0) #Angle from the center of the camera to neck_x
 
             score = float(x2) / float(entity.bounding_box.width) / float(entity.bounding_box.height)
             scoreList.append( [score, entity, Pitch, Yaw] )
@@ -128,11 +132,11 @@ class ObjectsDetectionGateway_process():
 
                 bbs.bounding_boxes.append( bounding_box )
 
-        return bbs        
-        
-    
+        return bbs
+
+
     def CreateGoalFromImage(self):
-        
+
         return 0
 
 
@@ -143,4 +147,3 @@ if __name__ == '__main__':
 
     except :#rospy.ROSInterruptException:
         pass
-
