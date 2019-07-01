@@ -1,6 +1,6 @@
 subscribers:
   camera_reading:
-    topic: /pepper_robot/camera/front/image_raw
+    topic: /darknet_ros/camera_in
     queue_size: 1
 actions:
   camera_reading:
