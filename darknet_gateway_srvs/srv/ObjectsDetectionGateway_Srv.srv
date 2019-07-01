@@ -1,3 +1,4 @@
 string[] labels
+string img_file_path
 ---
-robocup_msgs/Entity2DList entities 
+robocup_msgs/Entity2DList entities

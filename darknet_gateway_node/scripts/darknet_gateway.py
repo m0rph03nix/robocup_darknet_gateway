@@ -70,20 +70,27 @@ class ObjectsDetectionGateway_node():
 
         odg_process = ODG_process()
 
-        #goal = odg_process.CreateGoalFromImage( self.msg_img )
+        #Get image
+        if req.img_file_path == "":
+            while not self.image_ready :
+                rospy.loginfo("wait image")
+                rospy.sleep(0.05)
+            msg_img = self.msg_img
+        else:
+            img_loaded = cv2.imread(req.img_file_path)
+            msg_img = self._bridge.cv2_to_imgmsg(img_loaded, encoding="bgr8")
 
-        while not self.image_ready :
-            rospy.loginfo("wait image")
-            rospy.sleep(0.05)
-
+        #Create Goal
         goal = CheckForObjectsGoal()
         goal.id = 1
-        goal.image = self.msg_img
+        goal.image = msg_img
+
+        #Send and wait for results
         self._actCheckForObjects.send_goal(goal)
         self._actCheckForObjects.wait_for_result()
-
         result = self._actCheckForObjects.get_result()
 
+        #Get Entities from results
         e2D = odg_process.BoundingBoxes_to_Entity2DList( result.bounding_boxes, req.labels )
 
         #self.service_running = 0
@@ -95,14 +102,14 @@ class ObjectsDetectionGateway_node():
         odg_process = ODG_process()
         e2D = self.ODG_BB_SrvCallback(req)
 
-        scoreList, entityList, PitchList, YawList = odg_process.get_e2D_distSorted_withAngles(e2D, self.image_width, self.image_height)
+        score_list, entityList, pitch_list, yaw_list = odg_process.get_e2D_distSorted_withAngles(e2D, self.image_width, self.image_height)
 
         e2D.entity2DList = entityList
 
         return  {   'entities': e2D, #{'header': e2D.header, 'entity2DList': entityList }
-                    'pitchList': PitchList,
-                    'yawList' : YawList,
-                    'scoreList' : scoreList
+                    'pitch_list': pitch_list,
+                    'yaw_list' : yaw_list,
+                    'score_list' : score_list
                 }
 
 

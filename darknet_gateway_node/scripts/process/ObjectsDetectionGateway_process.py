@@ -82,7 +82,7 @@ class ObjectsDetectionGateway_process():
         Get pitch and yaw of each detected object according to the center of the camera images
         max pitch =
         """
-        scoreList = []
+        score_list = []
         score = 0
 
         for entity in e2D.entity2DList:
@@ -97,17 +97,17 @@ class ObjectsDetectionGateway_process():
             Pitch = (VFov / 2.0) *  (y - image_height / 2.0) / (image_height / 2.0) #Angle from the center of the camera to neck_x
 
             score = float(x2) / float(entity.bounding_box.width) / float(entity.bounding_box.height)
-            scoreList.append( [score, entity, Pitch, Yaw] )
-            #find index du min de scoreList
+            score_list.append( [score, entity, Pitch, Yaw] )
+            #find index du min de score_list
 
-        sortedScoreList = sorted(scoreList, key=lambda attributes: attributes, reverse=True)
+        sortedScoreList = sorted(score_list, key=lambda attributes: attributes, reverse=True)
 
-        scoreList   = map(lambda x: x[0], sortedScoreList)
+        score_list   = map(lambda x: x[0], sortedScoreList)
         entityList  = map(lambda x: x[1], sortedScoreList)
         PitchList   = map(lambda x: x[2], sortedScoreList)
         YawList     = map(lambda x: x[3], sortedScoreList)
 
-        return scoreList, entityList, PitchList, YawList
+        return score_list, entityList, PitchList, YawList
 
 
     def BoundingBoxes_Filtered(self, bounding_boxes, labels):
