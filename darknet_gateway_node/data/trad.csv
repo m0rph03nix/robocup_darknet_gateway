@@ -1,44 +1,80 @@
-aeroplane,aeroplane
-apple,apple
-bicycle,bicycle
-bird,bird
-boat,boat
-bus,bus
-cat,cat
-chair,chair
-chocolate_drink,chocolate_drink
-coke,coke
-cow,cow
-diningtable,dining_table
-dog,dog
-eponge_bicolore,scrubby
-eponge_jaune,sponge
-frosties,frosties
-grape_juice,grape_juice
-horse,horse
-jus_de_pomme,jus_de_pomme
-motorbike,motorbike
-orange_fruit,orange
-orange_juice,orange_juice
 person,person
-poivron,paprika
-popsi,cereal
-pottedplant,potted_plant
-pringles,pringles
-rice,rice
-sheep,sheep
-sofa,sofa
-sprite,sprite
+bicycle,bicycle
+car,car
+motorbike,motorbike
+aeroplane,aeroplane
+bus,bus
 train,train
-tvmonitor,tv_monitor
-vienna,sausages
-Chewing,chewing_gum
-Coca_original,coca_cola
-Freedent_chloro,freedent_chloro
-Freedent_fruit,freedent_fruit
-Oasis_Cass-Fram,oasis_cassis_framboise
-orangina,orangina
-Pepsi,pepsi
-redbull,redbull
-schweppes_agrum,schweppes_agrumes
-Wasabi,wasabi
+truck,truck
+boat,boat
+traffic light,traffic light
+fire hydrant,fire hydrant
+stop sign,stop sign
+parking meter,parking meter
+bench,bench
+bird,bird
+cat,cat
+dog,dog
+horse,horse
+sheep,sheep
+cow,cow
+elephant,elephant
+bear,bear
+zebra,zebra
+giraffe,giraffe
+backpack,backpack
+umbrella,umbrella
+handbag,handbag
+tie,tie
+suitcase,suitcase
+frisbee,frisbee
+skis,skis
+snowboard,snowboard
+sports ball,sports ball
+kite,kite
+baseball bat,baseball bat
+baseball glove,baseball glove
+skateboard,skateboard
+surfboard,surfboard
+tennis racket,tennis racket
+bottle,bottle
+wine glass,wine glass
+cup,cup
+fork,fork
+knife,knife
+spoon,spoon
+bowl,bowl
+banana,banana
+apple,apple
+sandwich,sandwich
+orange,orange
+broccoli,broccoli
+carrot,carrot
+hot dog,hot dog
+pizza,pizza
+donut,donut
+cake,cake
+chair,chair
+sofa,sofa
+pottedplant,pottedplant
+bed,bed
+diningtable,diningtable
+toilet,toilet
+tvmonitor,tvmonitor
+laptop,laptop
+mouse,mouse
+remote,remote
+keyboard,keyboard
+cell phone,cell phone
+microwave,microwave
+oven,oven
+toaster,toaster
+sink,sink
+refrigerator,refrigerator
+book,book
+clock,clock
+vase,vase
+scissors,scissors
+teddy bear,teddy bear
+hair drier,hair drier
+toothbrush,toothbrush
